@@ -1,0 +1,46 @@
+3 billion and me
+
+show user their whole DNA.  Demo toy.
+
+Levels of View
+-----------------
+- 22 chromosomes + X and Y + mitrochondria?
+	just the 24.  double click zooms in.  maybe click brings info on it in side panel
+
+- 1 chromosomes - left and right.
+	with centromere & telemeres
+	p (short) and q (long) arms
+	Click/doubleclick  on one of the arms, telemeres, centromere?
+
+- 1 chromosome arm/mere.  List of genes.  by various ids
+
+- one gene.  List of codons, numbered?  location?  Methylation?
+
+- codons (triplets)
+
+--------------------------------------- screens & Components
+- 23 chromosomes in genome = Genome & ChromInGenome
+- 10 arms of a chromosome = Chrom & armInChrom
+- list of genes in arm = arm & GeneInarm
+- list of codons in gene = Gene & CodonInGene
+
+- use seedrandom package for seeded rng
+- generator.js to generate codons and genes, incl gene name
+---------------------------------------
+MOBILE FIRST!
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+
+
