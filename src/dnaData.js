@@ -1,15 +1,16 @@
 /*
-** genome -- data structure that repsrensets a human's whole genome
+** dnaData -- data tables for use by arm.js thru genome.js
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, eqeqeq */
 
 
+/* ******************************************************************* chromos */
 // not all useful right now but maybe someday
 //Chromosome  BasePairs Variations Protein-codinggenes
 //		Pseudo-genes TotalLongncRNA TotalsmallncRNA
 //		miRNA rRNA snRNA snoRNA MiscncRNA
-export const chromoCounts: {
+export const chromoCounts = {
 1: {bases: 248387328, vars: 12151146, proteins: 2058,
 	pseudo: 1220, totLong: 1200, totSmall: 496,
 	miRna: 134, rRna: 66, snRna: 221, snoRna: 145, misc: 192},
@@ -93,15 +94,24 @@ XY23: {bases: 2963015935, vars: 0, proteins: 19557,
 	miRna: 1628, rRna: 508, snRna: 1859, snoRna: 1457, misc: 2113},
 };
 
+function printChromoStats() {
+	for (let name in chromoCounts) {
+		let ch = chromoCounts[name];
+		let genoThings = ch.proteins +
+			ch.pseudo + ch.totLong + ch.totSmall +
+			ch.miRna + ch.rRna + ch.snRna + ch.snoRna + ch.misc;
+		console.log(`${name}  bases/prots=${ch.bases / ch.proteins}     bases/things=${ch.bases / genoThings}`);
+	}
+}
+//printChromoStats();
 
-
-
+// size is in kbp - um not always in agreement with the above.
 // telomere length is 'arbitrary' units.  thanks a lot.
-export chromoArmSizes = {
+export const chromoArmSizes = {
  '1p': {size: 124.3, teloLen: 14.38},
  '1q': {size: 122.7, teloLen: 13.24},
+ '2p': {size: 93.3, teloLen: 12.74},
  '2q': {size: 149.7, teloLen: 10.55},
- '2q': {size: 93.3, teloLen: 12.74},
  '3p': {size: 91.7, teloLen: 14.46},
  '3q': {size: 108.3, teloLen: 13.00},
  '4p': {size: 50.8, teloLen: 13.32},
@@ -149,38 +159,40 @@ export chromoArmSizes = {
 };
 
 
+/* ******************************************************************* Codons */
 
 const rawAminos = [
-{name: 'Isoleucine', abbr: 'Ile', slc: 'I', codons: 'ATT, ATC, ATA'},
-{name: 'Leucine', abbr: 'Leu', slc: 'L', codons: 'CTT, CTC, CTA, CTG, TTA, TTG'},
-{name: 'Valine', abbr: 'Val', slc: 'V', codons: 'GTT, GTC, GTA, GTG'},
-{name: 'Phenylalanine', abbr: 'Phe', slc: 'F', codons: 'TTT, TTC'},
-{name: 'Methionine', abbr: 'Met', slc: 'M', codons: 'ATG'},
-{name: 'Cysteine', abbr: 'Cys', slc: 'C', codons: 'TGT, TGC'},
-{name: 'Alanine', abbr: 'Ala', slc: 'A', codons: 'GCT, GCC, GCA, GCG'},
-{name: 'Glycine', abbr: 'Gly', slc: 'G', codons: 'GGT, GGC, GGA, GGG'},
-{name: 'Proline', abbr: 'Pro', slc: 'P', codons: 'CCT, CCC, CCA, CCG'},
-{name: 'Threonine', abbr: 'Thr', slc: 'T', codons: 'ACT, ACC, ACA, ACG'},
-{name: 'Serine', abbr: 'Ser', slc: 'S', codons: 'TCT, TCC, TCA, TCG, AGT, AGC'},
-{name: 'Tyrosine', abbr: 'Tyr', slc: 'Y', codons: 'TAT, TAC'},
-{name: 'Tryptophan', abbr: 'Trp', slc: 'W', codons: 'TGG'},
-{name: 'Glutamine', abbr: 'Gln', slc: 'Q', codons: 'CAA, CAG'},
-{name: 'Asparagine', abbr: 'Asn', slc: 'N', codons: 'AAT, AAC'},
-{name: 'Histidine', abbr: 'His', slc: 'H', codons: 'CAT, CAC'},
-{name: 'Glutamic acid', abbr: 'Glu', slc: 'E', codons: 'GAA, GAG'},
-{name: 'Aspartic acid', abbr: 'Asp', slc: 'D', codons: 'GAT, GAC'},
-{name: 'Lysine', abbr: 'Lys', slc: 'K', codons: 'AAA, AAG'},
-{name: 'Arginine', abbr: 'Arg', slc: 'R', codons: 'CGT, CGC, CGA, CGG, AGA, AGG'},
-{name: 'Stop', abbr: 'Stop', slc: '*', codons: 'TAA, TAG, TGA'},
+	{name: 'Isoleucine', abbr: 'Ile', slc: 'I', codons: 'ATT, ATC, ATA'},
+	{name: 'Leucine', abbr: 'Leu', slc: 'L', codons: 'CTT, CTC, CTA, CTG, TTA, TTG'},
+	{name: 'Valine', abbr: 'Val', slc: 'V', codons: 'GTT, GTC, GTA, GTG'},
+	{name: 'Phenylalanine', abbr: 'Phe', slc: 'F', codons: 'TTT, TTC'},
+	{name: 'Methionine', abbr: 'Met', slc: 'M', codons: 'ATG'},
+	{name: 'Cysteine', abbr: 'Cys', slc: 'C', codons: 'TGT, TGC'},
+	{name: 'Alanine', abbr: 'Ala', slc: 'A', codons: 'GCT, GCC, GCA, GCG'},
+	{name: 'Glycine', abbr: 'Gly', slc: 'G', codons: 'GGT, GGC, GGA, GGG'},
+	{name: 'Proline', abbr: 'Pro', slc: 'P', codons: 'CCT, CCC, CCA, CCG'},
+	{name: 'Threonine', abbr: 'Thr', slc: 'T', codons: 'ACT, ACC, ACA, ACG'},
+	{name: 'Serine', abbr: 'Ser', slc: 'S', codons: 'TCT, TCC, TCA, TCG, AGT, AGC'},
+	{name: 'Tyrosine', abbr: 'Tyr', slc: 'Y', codons: 'TAT, TAC'},
+	{name: 'Tryptophan', abbr: 'Trp', slc: 'W', codons: 'TGG'},
+	{name: 'Glutamine', abbr: 'Gln', slc: 'Q', codons: 'CAA, CAG'},
+	{name: 'Asparagine', abbr: 'Asn', slc: 'N', codons: 'AAT, AAC'},
+	{name: 'Histidine', abbr: 'His', slc: 'H', codons: 'CAT, CAC'},
+	{name: 'Glutamic acid', abbr: 'Glu', slc: 'E', codons: 'GAA, GAG'},
+	{name: 'Aspartic acid', abbr: 'Asp', slc: 'D', codons: 'GAT, GAC'},
+	{name: 'Lysine', abbr: 'Lys', slc: 'K', codons: 'AAA, AAG'},
+	{name: 'Arginine', abbr: 'Arg', slc: 'R', codons: 'CGT, CGC, CGA, CGG, AGA, AGG'},
+	{name: 'Stop', abbr: 'Stop', slc: '*', codons: 'TAA, TAG, TGA'},
 ];
 
 // maps codons to which amino acid they create
 export const codonToAmino= {
 };
 
+// convert & build
 rawAminos.forEach(amino => {
 	let codons = amino.codons.split(', ');
 	codons.forEach(codon =>codonToAmino[codon] = amino.abbr );
 });
 
-
+// console.info('codonToAmino: ', codonToAmino)

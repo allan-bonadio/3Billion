@@ -4,34 +4,37 @@
 */
 /* eslint-disable no-unused-vars */
 
+import dnaObject from '../dnaObject.js';
 import chromo from '../chromo/chromo.js';
 import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
 import formulate from '../formulate.js';
+import {codonToAmino} from '../dnaData.js';
 
-class genome {
-	constructor(name, formula) {
-		this.name = `${name}`;
-		this.gender = formula.chance(.5) ? 'xx' : 'xy';
-		this.formula = formula;
+class genome extends dnaObject {
+	constructor(name, formula, gender) {
+		super(name, formula);
+		this.gender = gender;
 	}
 
+	// populate runs when we need to know the items at this level
 	// not a lot of variety here, everybody's got the same mostly
 	populate() {
-		if (this.list)
-			return;  // already done
+		if (this.list.length)
+			return; // already populated
+
 
 		const formula = this.formula;
-		const list = this.list = [];
+		const list = this.list = new Array(23);
 
 		// first the numbered chromosomes
 		for (let i = 1; i < 22; i++)
-			list.push(new chromo(i, this.formula.formulate()));
+			list[i] = new chromo(i, formula.newFormula());
 
 		// then the xx or xy pair
-		list.push(new chromo(this.gender, this.formula.formulate());
+		list[22] = new chromo(this.gender, formula.newFormula());
 	}
 
 }

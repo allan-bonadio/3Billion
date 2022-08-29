@@ -4,31 +4,30 @@
 */
 /* eslint-disable no-unused-vars */
 
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-
+import dnaObject from '../dnaObject.js';
 import genome from '../genome/genome.js';
 import chromo from '../chromo/chromo.js';
 import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 
 import formulate from '../formulate.js';
+import {codonToAmino} from '../dnaData.js';
 
 
-console.info(codonToAbbr);
+console.info(`codonToAmino:`, codonToAmino);
 
 
-
-class codon {
-	constructor(name, formula) {
-		this.name = name;
-		this.formula = formula;
+class codon extends dnaObject {
+	constructor(name) {
+		super(name, null);
+		this.amino = codonToAmino[name];
 	}
 
-	populate() {
-	}
+	// probably not needed
+	// populate() {
+	// }
 
-	list = '';
+	//list = '';
 }
 
 export default codon;

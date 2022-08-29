@@ -13,16 +13,24 @@ import arm from '../arm/arm.js';
 import gene from './gene.js';
 import codon from '../codon/codon.js';
 
+const num = new Intl.NumberFormat();
 
 function CodonInGene(props) {
-	const [name, setName] = useState('8');
-
+	let {theCodon, theGene, style, index} = props;
+	// index here is the codon number, not the base number.  x3
 
 	return (<>
-		<div>
-			CodonInGene
+		<div className='CodonInGene' style={style} >
+			<span className='rowIndex'>{num.format(3 * index)}</span>
+			<span className='rowCodon'>{theCodon.name}</span>
+			<span className='rowAmino'>{theCodon.amino}</span>
 		</div>
 	</>);
 }
 
+CodonInGene.propTypes = {
+	theCodon: PropTypes.instanceOf(codon).isRequired,
+	theGene: PropTypes.instanceOf(gene).isRequired,
+	style: PropTypes.object.isRequired,
+};
 export default CodonInGene;

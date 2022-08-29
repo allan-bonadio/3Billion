@@ -4,48 +4,71 @@
 */
 /* eslint-disable no-unused-vars */
 
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-
+import dnaObject from '../dnaObject.js';
 import genome from '../genome/genome.js';
 import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
 import formulate from '../formulate.js';
+import {codonToAmino} from '../dnaData.js';
+
+// 'chromosome' is just too long a name so I standardized on Chromo.
 
 
 
-
-
-class chromo {
-	constructor(name formula) {
-		this.name = name;
-		this.formula = formula;
+class chromo extends dnaObject {
+	// the name is either 1-22 or xx or xy
+	constructor(name, formula) {
+		super(`${name}`, formula);
 	}
 
+	// populate runs when we need to know the items at this level
 	populate() {
-		if (this.list)
-			return;  // already done
+		if (this.list.length)
+			return; // already populated
 
 		const formula = this.formula;
 
 		// always the same sequence
 		this.list = [
-			new arm('pter_L', formula.formulate()),
-			new arm('p_L', formula.formulate()),
-			new arm('cen_L', formula.formulate()),
-			new arm('q_L', formula.formulate()),
-			new arm('qter_L', formula.formulate()),
+			// arguments to arm() are armName, formula, chromoName
+			new arm('pter_L', formula.newFormula(), this.name),
+			new arm('p_L', formula.newFormula(), this.name),
+			new arm('cen_L', formula.newFormula(), this.name),
+			new arm('q_L', formula.newFormula(), this.name),
+			new arm('qter_L', formula.newFormula(), this.name),
 
-			new arm('pter_L', formula.formulate()),
-			new arm('p_L', formula.formulate()),
-			new arm('cen_L', formula.formulate()),
-			new arm('q_L', formula.formulate()),
-			new arm('qter_L', formula.formulate()),
+			new arm('pter_R', formula.newFormula(), this.name),
+			new arm('p_R', formula.newFormula(), this.name),
+			new arm('cen_R', formula.newFormula(), this.name),
+			new arm('q_R', formula.newFormula(), this.name),
+			new arm('qter_R', formula.newFormula(), this.name),
 		];
 
 	}
 }
+
+/* for your convenience:
+pter_L
+p_L
+cen_L
+q_L
+qter_L
+
+pter_R
+p_R
+cen_R
+q_R
+qter_R
+
+pter
+p
+cen
+q
+qter
+
+
+*/
 
 export default chromo;

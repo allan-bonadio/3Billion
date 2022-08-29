@@ -13,16 +13,24 @@ import arm from './arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
+const num = new Intl.NumberFormat();
 
 function GeneInArm(props) {
-	const [name, setName] = useState('8');
+	let {theGene, theArm, style, index} = props;
 
 
 	return (<>
-		<div>
-			GeneInArm
+		<div className='GeneInArm' style={style} >
+			<span className='rowIndex'>{num.format(index)}</span>
+			<span className='rowCodon'>{theGene.name}</span>
 		</div>
 	</>);
 }
+
+GeneInArm.propTypes = {
+	theGene: PropTypes.instanceOf(gene).isRequired,
+	theArm: PropTypes.instanceOf(arm).isRequired,
+	style: PropTypes.object.isRequired,
+};
 
 export default GeneInArm;

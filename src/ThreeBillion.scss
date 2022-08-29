@@ -6,7 +6,9 @@
 
 body {
 	box-sizing: border-box;
-	font: times 100px regular;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size: 16px;
+	font-style: regular;
 }
 
 .ThreeBillion {
@@ -25,30 +27,91 @@ header img {
 
 }
 
+
+
 .AGenome {
+	.ChromoInGenome {
+		position: relative;
+		float: left;
+		margin: .5em;
+		text-align: center;
+
+		// where the green hiliting comes from
+		.cover {
+			position: absolute;
+			background-color: #0000;
+			width: 100%;
+			height: 100%;
+
+			&:hover {
+				background-color: #cfe4;
+				z-index: 10;
+			}
+			&:active {
+				background-color: #4fd8;
+				z-index: 10;
+			}
+		}
+
+		.leftX {
+			position: absolute;
+			clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100% );
+		}
+		.rightX .rightY {
+			position: absolute;
+			clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+		}
+	}
 
 }
 
-.ChromoInGenome {
-	position: relative;
-	float: left;
-	margin: .5em;
-	text-align: center;
 
-	.cover {
+.AChromo {
+	// same size as the image
+	width: 370px;
+	height: 768px;
+
+
+	img {
+	}
+	.ArmInChromo {
 		position: absolute;
-		background-color: #0000;
-		width: 100%;
-		height: 100%;
+		width: 185px;
+	}
+}
 
-		&:hover {
-			background-color: #cfe4;
-			z-index: 10;
+.AnArm {
+	.GeneInArm {
+	}
+}
+
+.AnArm, .AGene {
+	border: 1px inset #aaa;
+
+	.GeneInArm, .CodonInGene {
+		width: 100%;
+		display: flex;
+
+		span {
+			display: inline-block;
+			flex: 1 0 3em;
 		}
-		&:active {
-			background-color: #4fd8;
-			z-index: 10;
+		span:first-child {
+			flex: 0 0 6em;
+			text-align: right;
+			margin-right: 1em;
+			flex: 2;
+			font-size: .8em;
+			color: #666;
 		}
 	}
 }
 
+
+//
+// .rowIndex, .rowCodon, .rowAmino, .rowGene {
+// 	float: left;
+// 	width: 100px;
+// 	text-align: right;
+// }
+//

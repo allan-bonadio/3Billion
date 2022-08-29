@@ -16,12 +16,14 @@ import codon from '../codon/codon.js';
 
 import formulate from '../formulate.js';
 
-const form = formulate(43);
-
 function AGenome(props) {
-	const [genome, setGenome] = useState(props.genome);
+	let {formula, theGenome} = props;
+	let name = theGenome.name;
 
-	let chromos = genome.list.map(ch => <ChromoInGenome name={`${ch.name}`} key={ch.name} />)
+	theGenome.populate();
+console.info(`theGenome.list: `, theGenome.list);
+	let chromos = theGenome.list.map(theChromo =>
+		<ChromoInGenome theChromo={theChromo} theGenome={theGenome} key={theChromo.name} />);
 
 	return (<>
 		<div className='AGenome'>
@@ -33,7 +35,7 @@ function AGenome(props) {
 }
 
 AGenome.propTypes = {
-	genome: PropTypes.instanceOf(genome).isRequired,
+	theGenome: PropTypes.instanceOf(genome).isRequired,
 };
 
 export default AGenome;

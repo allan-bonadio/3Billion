@@ -7,6 +7,8 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
+import { FixedSizeList as List } from 'react-window';
+
 import AGene from '../gene/AGene.js';
 import GeneInArm from './GeneInArm.js';
 
@@ -17,19 +19,39 @@ import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
 
-function AnArm(props) {
-	const [name, setName] = useState('8');
-
-
-	return (<>
-		<div>
-			AnArm
-		</div>
-	</>);
-
-	// why doesn't this import work?
-	//			<GeneInArm />
-
+const Row = ({index, style, data}) => {
+	let theArm = data;
+	let theGene = theArm.list[index];
+	return <GeneInArm theGene={theGene} theArm={theArm}
+		key={theGene.name} index={index} style={style} />;
 }
 
+function AnArm(props) {
+	let {theArm} = props;
+	let name = theArm.name;
+
+	theArm.populate();
+console.info(`theArm.list: `, theArm.list);
+
+	return (<>
+		AnArm
+		<List
+			itemCount={theArm.list.length}
+			itemData={theArm}
+			itemSize={20}
+			width={250}
+			height={400}
+			className='AnArm'
+		>
+			{Row}
+		</List>
+	</>);
+}
+
+AnArm.propTypes = {
+	theArm: PropTypes.instanceOf(arm).isRequired,
+};
+
 export default AnArm;
+
+

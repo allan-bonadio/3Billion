@@ -14,15 +14,41 @@ import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
 
+
+
+
+
+const topHeight = {
+	pter: [0, 80],
+	p: [80, 88],
+	cen: [168, 80],
+	q: [248, 440],
+	qter: [688, 80],
+};
+
+
+
 function ArmInChromo(props) {
-	const [name, setName] = useState('8');
+	let {name} = props;
+
+	// we figure out where we should be from the name
+	let [chHeight, side] = name.split('_');
+
+	let [top, height] = topHeight[chHeight];
+	let left = ('L' == side) ? 0 : 185;
+	let style = {top, height, left};
 
 
 	return (<>
-		<div>
-			ArmInChromo
+		<div className={`ArmInChromo ${name}`} style={style} >
+			ArmInChromo {name}
 		</div>
 	</>);
 }
+
+ArmInChromo.propTypes = {
+	theArm: PropTypes.instanceOf(arm).isRequired,
+	theChromo: PropTypes.instanceOf(chromo).isRequired,
+};
 
 export default ArmInChromo;
