@@ -33,17 +33,17 @@ class chromo extends dnaObject {
 		// always the same sequence
 		this.list = [
 			// arguments to arm() are armName, formula, chromoName
-			new arm('pter_L', formula.newFormula(), this.name),
-			new arm('p_L', formula.newFormula(), this.name),
-			new arm('cen_L', formula.newFormula(), this.name),
-			new arm('q_L', formula.newFormula(), this.name),
-			new arm('qter_L', formula.newFormula(), this.name),
+			new arm('pter_L', 'left', 'short arm telomere', formula.newFormula(), this.name),
+			new arm('p_L', 'left', 'short arm', formula.newFormula(), this.name),
+			new arm('cen_L', 'left', 'centromere', formula.newFormula(), this.name),
+			new arm('q_L', 'left', 'long arm', formula.newFormula(), this.name),
+			new arm('qter_L', 'left', 'long arm telomere', formula.newFormula(), this.name),
 
-			new arm('pter_R', formula.newFormula(), this.name),
-			new arm('p_R', formula.newFormula(), this.name),
-			new arm('cen_R', formula.newFormula(), this.name),
-			new arm('q_R', formula.newFormula(), this.name),
-			new arm('qter_R', formula.newFormula(), this.name),
+			new arm('pter_R', 'right', 'short arm telomere', formula.newFormula(), this.name),
+			new arm('p_R', 'right', 'short arm', formula.newFormula(), this.name),
+			new arm('cen_R', 'right', 'centromere', formula.newFormula(), this.name),
+			new arm('q_R', 'right', 'long arm', formula.newFormula(), this.name),
+			new arm('qter_R', 'right', 'long arm telomere', formula.newFormula(), this.name),
 		];
 
 	}

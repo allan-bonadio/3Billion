@@ -14,7 +14,7 @@ import formulate from '../formulate.js';
 import {codonToAmino} from '../dnaData.js';
 
 
-console.info(`codonToAmino:`, codonToAmino);
+//console.info(`codonToAmino:`, codonToAmino);
 
 
 class codon extends dnaObject {

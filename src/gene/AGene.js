@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { FixedSizeList as List } from 'react-window';
 
 import CodonInGene from './CodonInGene.js';
+import BackButton from '../BackButton.js';
 
 import genome from '../genome/genome.js';
 import chromo from '../chromo/chromo.js';
@@ -27,16 +28,15 @@ const Row = ({index, style, data}) => {
 
 // an entire gene, listing all its codons.  whew, too many.
 function AGene(props) {
-	let {formula, theGene} = props;
+	let {theGene, style} = props;
 	let name = theGene.name;
 
 	theGene.populate();
-console.info(`theGene.list: `, theGene.list);
-// 	let codons = theGene.list.map((theCodon, ix) =>
-// 		<CodonInGene theCodon={theCodon} theGene={theGene} key={ix} style={{}}/>);
+	//console.info(`theGene.list: `, theGene.list);
 
-	return (<>
-		A Gene
+	return (<div className='AGene viewingPanel'  key='gene' style={style}>
+		<BackButton title='Arm' />
+		<h3>Gene {theGene.name}</h3>
 		<List
 			itemCount={theGene.list.length}
 			itemData={theGene}
@@ -48,11 +48,12 @@ console.info(`theGene.list: `, theGene.list);
 			{Row}
 		</List>
 
-	</>);
+	</div>);
 }
 
 AGene.propTypes = {
 	theGene: PropTypes.instanceOf(gene).isRequired,
+	style: PropTypes.object.isRequired,
 };
 
 export default AGene;

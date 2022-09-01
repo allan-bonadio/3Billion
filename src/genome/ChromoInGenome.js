@@ -13,6 +13,7 @@ import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
+import {navigateIn} from '../ThreeBillion.js';
 
 function ChromoInGenome(props) {
 	const {theChromo} = props;
@@ -37,8 +38,9 @@ function ChromoInGenome(props) {
 	}
 
 	return (<>
-		<div className='ChromoInGenome' key={name} >
-			<div className='cover' />
+		<div className='ChromoInGenome' key={name}
+				onClick={ev => navigateIn('chromo', theChromo)}>
+			<div className='cover clickable' />
 			{images}
 			<div>{name}</div>
 		</div>

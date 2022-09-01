@@ -13,6 +13,8 @@ import arm from '../arm/arm.js';
 import gene from './gene.js';
 import codon from '../codon/codon.js';
 
+import {navigateIn} from '../ThreeBillion.js';
+
 const num = new Intl.NumberFormat();
 
 function CodonInGene(props) {
@@ -20,7 +22,7 @@ function CodonInGene(props) {
 	// index here is the codon number, not the base number.  x3
 
 	return (<>
-		<div className='CodonInGene' style={style} >
+		<div className='CodonInGene clickable' style={style} >
 			<span className='rowIndex'>{num.format(3 * index)}</span>
 			<span className='rowCodon'>{theCodon.name}</span>
 			<span className='rowAmino'>{theCodon.amino}</span>

@@ -8,30 +8,31 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import ChromoInGenome from './ChromoInGenome.js';
+import BackButton from '../BackButton.js';
+
 import genome from './genome.js';
 import chromo from '../chromo/chromo.js';
 import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
-import formulate from '../formulate.js';
-
 function AGenome(props) {
-	let {formula, theGenome} = props;
+	let {theGenome} = props;
 	let name = theGenome.name;
 
 	theGenome.populate();
-console.info(`theGenome.list: `, theGenome.list);
+	//console.info(`theGenome.list: `, theGenome.list);
 	let chromos = theGenome.list.map(theChromo =>
 		<ChromoInGenome theChromo={theChromo} theGenome={theGenome} key={theChromo.name} />);
 
-	return (<>
-		<div className='AGenome'>
-			<p>Choose which chromosome to look at.</p>
+	return (
+		<div className='AGenome' key='genome'>
+			<h3>Genome for {name}</h3>
+			<p>Choose which chromosome to explore:</p>
 			{chromos}
 			<br clear='left' />
 		</div>
-	</>);
+	);
 }
 
 AGenome.propTypes = {

@@ -11,6 +11,7 @@ import { FixedSizeList as List } from 'react-window';
 
 import AGene from '../gene/AGene.js';
 import GeneInArm from './GeneInArm.js';
+import BackButton from '../BackButton.js';
 
 import genome from '../genome/genome.js';
 import chromo from '../chromo/chromo.js';
@@ -27,14 +28,15 @@ const Row = ({index, style, data}) => {
 }
 
 function AnArm(props) {
-	let {theArm} = props;
+	let {theArm, style} = props;
 	let name = theArm.name;
 
 	theArm.populate();
-console.info(`theArm.list: `, theArm.list);
+	//console.info(`theArm.list: `, theArm.list);
 
-	return (<>
-		AnArm
+	return (<div className='AnArm viewingPanel' key='arm' style={style}>
+		<BackButton title='Chromosome' />
+		<h3>Arm {theArm.name}</h3>
 		<List
 			itemCount={theArm.list.length}
 			itemData={theArm}
@@ -45,11 +47,12 @@ console.info(`theArm.list: `, theArm.list);
 		>
 			{Row}
 		</List>
-	</>);
+	</div>);
 }
 
 AnArm.propTypes = {
 	theArm: PropTypes.instanceOf(arm).isRequired,
+	style: PropTypes.object.isRequired,
 };
 
 export default AnArm;

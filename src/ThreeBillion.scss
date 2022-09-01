@@ -8,7 +8,6 @@ body {
 	box-sizing: border-box;
 	font-family: verdana, helvetica, arial, sans-serif;
 	font-size: 16px;
-	font-style: regular;
 }
 
 .ThreeBillion {
@@ -21,12 +20,44 @@ header img {
 }
 
 
+// the area that contains AGenome, AChromo, etc
+main#MainTop {
+	// anything the user clicks that hilites in light green upon click and hover
+	.clickable:active {
+		background-color: #4fd8;
+		z-index: 10;
+	}
+	@media  (hover: hover) {
+		.clickable:hover {
+			background-color: #cfe4;
+			z-index: 10;
+		}
+	}
 
-.main {
+	h3 {
+		text-align: center;
+		margin: .5em;
+	}
 
+	.BackButton {
+		background-color: transparent;
+		border: none;
+		color: #0ad;
 
+	}
 }
 
+// any of the AGenome, AnArm, AGene main panels
+@media (max-width: 800px) {
+	.viewingPanel {
+		position: fixed;
+	}
+}
+@media not (max-width: 800px) {
+	.viewingPanel {
+		//float: left;
+	}
+}
 
 
 .AGenome {
@@ -35,6 +66,7 @@ header img {
 		float: left;
 		margin: .5em;
 		text-align: center;
+		font-size: .7em;
 
 		// where the green hiliting comes from
 		.cover {
@@ -43,14 +75,6 @@ header img {
 			width: 100%;
 			height: 100%;
 
-			&:hover {
-				background-color: #cfe4;
-				z-index: 10;
-			}
-			&:active {
-				background-color: #4fd8;
-				z-index: 10;
-			}
 		}
 
 		.leftX {
@@ -70,13 +94,34 @@ header img {
 	// same size as the image
 	width: 370px;
 	height: 768px;
+	position: relative;
 
 
 	img {
+		position: absolute;
+		display: block;
 	}
+	@media (max-width: 800px) {
+		img {
+			width: 100%
+		}
+	}
+
 	.ArmInChromo {
 		position: absolute;
 		width: 185px;
+		//border: 1px dotted #ccc;
+		text-align: center;
+		font-size: .7em;
+		padding-top: 10%;
+
+		// the card behind the text
+		> div {
+			padding: .3em;
+			display: inline-block;
+			background-color: #fff6;
+			border-radius: 1em;
+		}
 	}
 }
 
@@ -86,7 +131,7 @@ header img {
 }
 
 .AnArm, .AGene {
-	border: 1px inset #aaa;
+	border: 1px solid #aaa;
 
 	.GeneInArm, .CodonInGene {
 		width: 100%;
@@ -101,7 +146,7 @@ header img {
 			text-align: right;
 			margin-right: 1em;
 			flex: 2;
-			font-size: .8em;
+			font-size: .7em;
 			color: #666;
 		}
 	}
@@ -115,3 +160,5 @@ header img {
 // 	text-align: right;
 // }
 //
+
+

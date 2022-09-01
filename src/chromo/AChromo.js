@@ -8,6 +8,7 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import ArmInChromo from './ArmInChromo.js';
+import BackButton from '../BackButton.js';
 
 import genome from '../genome/genome.js';
 import chromo from './chromo.js';
@@ -21,32 +22,22 @@ import armsInChromoImage from './armsInChromo2.png';
 
 
 function AChromo(props) {
-	let {formula, theChromo} = props;
+	let {theChromo, style} = props;
 	let name = theChromo.name;
 
 	theChromo.populate();
-console.info(`theChromo.list: `, theChromo.list);
+	//console.info(`theChromo.list: `, theChromo.list);
 	let arms = theChromo.list.map(theArm =>
 		<ArmInChromo theArm={theArm} theChromo={theChromo} key={theArm.name} />);
 
 	return (<>
-		<div className='AChromo'>
-			<img src={armsInChromoImage} />
+		<div className='AChromo viewingPanel' key='chromo' style={style}>
+			<BackButton title='Genome' />
+			<h3>Chromosome {theChromo.name}</h3>
+			<img src={armsInChromoImage}  alt='parts of a chromosome'/>
 			<div style={{width: '100%', textAlign: 'center', position: 'absolute'}} >
-				AChromo</div>
-
-			<ArmInChromo name='pter_L' key='pter_L' />
-			<ArmInChromo name='p_L' key='p_L' />
-			<ArmInChromo name='cen_L' key='cen_L' />
-			<ArmInChromo name='q_L' key='q_L' />
-			<ArmInChromo name='qter_L' key='qter_L' />
-
-			<ArmInChromo name='pter_R' key='pter_R' />
-			<ArmInChromo name='p_R' key='p_R' />
-			<ArmInChromo name='cen_R' key='cen_R' />
-			<ArmInChromo name='q_R' key='q_R' />
-			<ArmInChromo name='qter_R' key='qter_R' />
-
+				{arms}
+			</div>
 
 		</div>
 	</>);
@@ -54,6 +45,7 @@ console.info(`theChromo.list: `, theChromo.list);
 
 AChromo.propTypes = {
 	theChromo: PropTypes.instanceOf(chromo).isRequired,
+	style: PropTypes.object.isRequired,
 };
 
 export default AChromo;

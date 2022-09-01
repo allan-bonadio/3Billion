@@ -14,7 +14,7 @@ import formulate from '../formulate.js';
 import {codonToAmino} from '../dnaData.js';
 
 class arm extends dnaObject {
-	constructor(name, formula, chromoName) {
+	constructor(name, side, title, formula, chromoName) {
 		super(name, formula);
 		this.chromoName = chromoName;
 	}
