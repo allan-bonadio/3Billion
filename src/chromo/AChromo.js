@@ -32,13 +32,14 @@ function AChromo(props) {
 
 	return (<>
 		<div className='AChromo viewingPanel' key='chromo' style={style}>
-			<BackButton title='Genome' />
+			<BackButton title='Genome' level='genome' />
 			<h3>Chromosome {theChromo.name}</h3>
-			<img src={armsInChromoImage}  alt='parts of a chromosome'/>
-			<div style={{width: '100%', textAlign: 'center', position: 'absolute'}} >
-				{arms}
+			<div className='chromoImage'>
+				<img src={armsInChromoImage}  alt='parts of a chromosome'/>
+				<div className='armContainer' >
+					{arms}
+				</div>
 			</div>
-
 		</div>
 	</>);
 }

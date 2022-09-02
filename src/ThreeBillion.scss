@@ -8,6 +8,7 @@ body {
 	box-sizing: border-box;
 	font-family: verdana, helvetica, arial, sans-serif;
 	font-size: 16px;
+	background-color: #e1fdff;
 }
 
 .ThreeBillion {
@@ -20,18 +21,27 @@ header img {
 }
 
 
+
 // the area that contains AGenome, AChromo, etc
-main#MainTop {
-	// anything the user clicks that hilites in light green upon click and hover
-	.clickable:active {
-		background-color: #4fd8;
-		z-index: 10;
-	}
+main#Main {
 	@media  (hover: hover) {
 		.clickable:hover {
-			background-color: #cfe4;
+			background-color: #cdd;
 			z-index: 10;
 		}
+	}
+
+	// anything the user clicks that hilites  upon click and hover
+	// must put :active after :hover
+	.clickable:active {
+		background-color: #008;
+		color: #ff8;
+		z-index: 10;
+	}
+
+	.clickable.selected {
+		background-color: #00fa;
+		z-index: 10;
 	}
 
 	h3 {
@@ -48,12 +58,12 @@ main#MainTop {
 }
 
 // any of the AGenome, AnArm, AGene main panels
-@media (max-width: 800px) {
+@media (max-width: 500px) {
 	.viewingPanel {
 		position: fixed;
 	}
 }
-@media not (max-width: 800px) {
+@media not (max-width: 500px) {
 	.viewingPanel {
 		//float: left;
 	}
@@ -74,7 +84,7 @@ main#MainTop {
 			background-color: #0000;
 			width: 100%;
 			height: 100%;
-
+			border-radius: 1em;
 		}
 
 		.leftX {
@@ -91,19 +101,29 @@ main#MainTop {
 
 
 .AChromo {
-	// same size as the image
-	width: 370px;
-	height: 768px;
+	// never bigger than the image
+	max-width: 370px;
 	position: relative;
 
+	.chromoImage {
+		max-height: 768px;
+		position: relative;
 
-	img {
-		position: absolute;
-		display: block;
-	}
-	@media (max-width: 800px) {
+		.armContainer {
+			position: absolute;
+
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			z-index: 10;
+			top: 0;
+		}
+
+		// big pic of the chromosome: make it fit the box it's in
 		img {
-			width: 100%
+			display: block;
+			width: 100%;
+			height: 100%;
 		}
 	}
 
@@ -114,6 +134,7 @@ main#MainTop {
 		text-align: center;
 		font-size: .7em;
 		padding-top: 10%;
+		border-radius: 1em;
 
 		// the card behind the text
 		> div {

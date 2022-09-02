@@ -35,7 +35,7 @@ function AnArm(props) {
 	//console.info(`theArm.list: `, theArm.list);
 
 	return (<div className='AnArm viewingPanel' key='arm' style={style}>
-		<BackButton title='Chromosome' />
+		<BackButton title='Chromosome' level='chromo' />
 		<h3>Arm {theArm.name}</h3>
 		<List
 			itemCount={theArm.list.length}

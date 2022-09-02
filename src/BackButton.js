@@ -7,23 +7,26 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-import {navigateOut} from './ThreeBillion.js';
+import {navigateOut, isNarrowScreen} from './ThreeBillion.js';
 
 
 function BackButton(props) {
 	function handleClick(ev) {
-		navigateOut();
+		navigateOut(props.level);
 	}
+
+	const arrow = isNarrowScreen ? '❮ ' : '⇧';  // or try ⬆
 
 	return (
 		<button className='BackButton clickable' onClick={handleClick} >
-			<big>❮  </big> {props.title}
+			<big>{arrow} </big> {props.title}
 		</button>
 	);
 }
 
 BackButton.propTypes = {
 	title: PropTypes.string.isRequired,
+	level: PropTypes.string.isRequired,
 };
 
 export default BackButton;

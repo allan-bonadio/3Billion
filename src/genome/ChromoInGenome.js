@@ -18,30 +18,15 @@ import {navigateIn} from '../ThreeBillion.js';
 function ChromoInGenome(props) {
 	const {theChromo} = props;
 	const name = theChromo.name;
-	let images;
-	if (name[0] != 'x') {
-		images = <img className='chromoIcon'
+	let icon = <img className='chromoIcon'
 				src={`chromos/ch${name}.png`}
 				alt={'chromosome '+ name} />;
-	}
-	else {
-		let xory = name[1];
-		let XORY = xory.toUpperCase();
-		images = [
-			<img className='chromoIcon leftX' key='LX'
-				src={`chromos/xLeft.png`}
-				alt={'chromosome X'} />,
-			<img className={`chromoIcon right${XORY}`} key='RXY'
-				src={`chromos/${xory}Right.png`}
-				alt={`chromosome ${XORY}`} />
-		];
-	}
 
 	return (<>
 		<div className='ChromoInGenome' key={name}
 				onClick={ev => navigateIn('chromo', theChromo)}>
 			<div className='cover clickable' />
-			{images}
+				{icon}
 			<div>{name}</div>
 		</div>
 	</>);

@@ -19,11 +19,11 @@ import {navigateIn} from '../ThreeBillion.js';
 
 
 const topHeight = {
-	pter: [0, 80, 'teleomere, short end'],
-	p: [80, 88, 'short arm'],
-	cen: [168, 80, 'centromere'],
-	q: [248, 440, 'long arm'],
-	qter: [688, 80, 'teleomere, long end'],
+	pter: [0, '10%', 'teleomere, short end'],
+	p: ['10%', '11%', 'short arm'],
+	cen: ['22%', '10%', 'centromere'],
+	q: ['32%', '57%', 'long arm'],
+	qter: ['90%', '10%', 'teleomere, long end'],
 };
 
 

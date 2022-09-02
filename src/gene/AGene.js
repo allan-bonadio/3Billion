@@ -35,7 +35,7 @@ function AGene(props) {
 	//console.info(`theGene.list: `, theGene.list);
 
 	return (<div className='AGene viewingPanel'  key='gene' style={style}>
-		<BackButton title='Arm' />
+		<BackButton title='Arm' level='arm' />
 		<h3>Gene {theGene.name}</h3>
 		<List
 			itemCount={theGene.list.length}

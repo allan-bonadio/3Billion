@@ -21,8 +21,6 @@ import codon from './codon/codon.js';
 
 import formulate from './formulate.js';
 
-const narrowQueryList = window.matchMedia("(max-width: 800px)");
-
 // attach hooks setters here so I can use them in these functions out here.
 let setters = {};
 
@@ -92,21 +90,49 @@ export function navigateIn(deeperPanelDesc, model) {
 	if (typeof deeperPanelDesc == 'string')
 		deeperPanelDesc = {level: deeperPanelDesc, model};
 
+	// don't just keep on pushing stuff on the stack; get rid of the stuff this replaces
+	for (let i = 0; i < panelDescStack.length; i++) {
+		if (panelDescStack[i].level == deeperPanelDesc.level) {
+			panelDescStack.splice(i, 5,deeperPanelDesc);
+			break;
+		}
+	}
 	panelDescStack.push(deeperPanelDesc);
 	setters.setRightPanelDesc(deeperPanelDesc);
 	navigationDirection = 1;
+	console.info(`navigateIn(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`,
+		[...panelDescStack]);
 }
 
 // user ... clicks on '< genome' or whatever button
-export function navigateOut() {
-	panelDescStack.pop();
+// the level tells which panel it's at the top of
+export function navigateOut(level) {
+	// pop off all levels at that level and lower
+	for (let i = 0; i < panelDescStack.length; i++) {
+		if (panelDescStack[i].level == level) {
+			panelDescStack.splice(i, 5);
+			break;
+		}
+	}
 	setters.setLeftPanelDesc(getCurrentPanelDesc());
 	// but don't set the central panel descriptor, that's where we are.
 	navigationDirection = -1;
+	console.info(`navigateOut(${level}) panelDescStack=`,
+		[...panelDescStack]);
 }
 
 
 /* ************************************** components */
+
+// is it mobile?  Listener fires upon startup and at every change
+const narrowQueryList = window.matchMedia("(max-width: 500px)");
+export let isNarrowScreen;
+
+// Fires when phone rotates or browser window changes width.
+// sets global and hook versions of isNarrowScreen at the same time
+narrowQueryList.addEventListener('change',
+	ev => setters.setIsNarrowScreen(isNarrowScreen = narrowQueryList.match));
+
 
 // only appears on the Genome screen
 function Header(props) {
@@ -122,7 +148,7 @@ function Header(props) {
 	return (
 		<header>
 			<h1>
-				<img src='chromosome.png' alt='logo' />
+				<img src='chromosome2.png' alt='logo' />
 				3 Billion And Me
 			</h1>
 			<p>
@@ -145,19 +171,18 @@ Header.propTypes = {
 };
 
 // make the panel that the user clicked to.
-// Doesn't even use the key - should get rid of it
 // position: 0 for current panel, -1 or +1 if in transition
 function panelFactory(panelDesc, patientIndex, position) {
 
 	let style = {};
 	if (position) {
-		if (narrowQueryList.matches) {
-			// mobile
-			style.position = 'relative';
+		if (isNarrowScreen) {
+			// mobile - make them slide across
+			style = {position: 'relative', transitionProperty: 'left', transitionDuration: '1s'};
 			if (position < 0)
-				style.right = screen.width;
+				style.left = `${-screen.width}px`;
 			else if (position > 0)
-				style.left = screen.width;
+				style.left = `${screen.width}px`;
 		}
 	}
 
@@ -189,8 +214,10 @@ function panelFactory(panelDesc, patientIndex, position) {
 function ThreeBillion(props) {
 	let [patientIndex, setPatientIndex] = useState(defaultPatientIndex);
 
+	// this isNarrowScreen shadows the exported global, but they're set at the same time
+	let [isNarrowScreen, setIsNarrowScreen] = useState(true);
+
 	// current panel being displayed, an item on panelDescStack
-	// is this good as a default panelDesc?
 	let [panelDesc, setPanelDesc] = useState(panelDescStack[0]);
 	//let [panelDesc, setPanelDesc] = useState(getCurrentPanelDesc());
 
@@ -199,11 +226,12 @@ function ThreeBillion(props) {
 	let [leftPanelDesc, setLeftPanelDesc] = useState(null);
 	let [rightPanelDesc, setRightPanelDesc] = useState(null);
 
-	setters = {setPatientIndex, setLeftPanelDesc, setPanelDesc, setRightPanelDesc};
+	setters = {setPatientIndex, setIsNarrowScreen,
+		setLeftPanelDesc, setPanelDesc, setRightPanelDesc};
 
 	let viewingPanels;
 
-	if (narrowQueryList.matches) {
+	if (isNarrowScreen) {
 		// upright iPhone
 		viewingPanels = [, panelFactory(panelDesc, patientIndex, 0), ];
 		if (leftPanelDesc) {
