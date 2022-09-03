@@ -32,9 +32,13 @@ function AChromo(props) {
 
 	return (<>
 		<div className='AChromo viewingPanel' key='chromo' style={style}>
-			<BackButton title='Genome' level='genome' />
+			<BackButton title='Genome' level='chromo' />
 			<h3>Chromosome {theChromo.name}</h3>
-			<div className='chromoImage'>
+			The left and right chromatids come from the mother and father,
+			but figuring out which came from where is difficult.
+			So the labels 'left' and 'right' are mostly meaningless.
+			<div className='chromoImage'
+					onMouseMove={ev => ev.preventDefault()}>
 				<img src={armsInChromoImage}  alt='parts of a chromosome'/>
 				<div className='armContainer' >
 					{arms}

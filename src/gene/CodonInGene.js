@@ -13,7 +13,7 @@ import arm from '../arm/arm.js';
 import gene from './gene.js';
 import codon from '../codon/codon.js';
 
-import {navigateIn} from '../ThreeBillion.js';
+// import ThreeBillion from './ThreeBillion.js';
 
 const num = new Intl.NumberFormat();
 

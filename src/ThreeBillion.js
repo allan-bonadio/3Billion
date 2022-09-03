@@ -2,7 +2,7 @@
 ** 3Billion -- root component of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq, no-restricted-globals */
+/* eslint-disable no-unused-vars, eqeqeq, no-restricted-globals,  no-sparse-arrays */
 
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
@@ -20,245 +20,168 @@ import gene from './gene/gene.js';
 import codon from './codon/codon.js';
 
 import formulate from './formulate.js';
-
-// attach hooks setters here so I can use them in these functions out here.
-let setters = {};
-
-// the panelDesc stack has the models the user is viewing.
-// The screen components are driven from the models.
-let panelDescStack = [];
-
-const getCurrentPanelDesc =
-() => panelDescStack.at(-1);
+import Header, {getDefaultPatient} from './Header.js';
 
 
-/* ************************************** patient */
 
-const patients = [
-	{name: 'Alan Shepard', gender: 'xy'},
-	{name: 'Alexander Gerst', gender: 'xy'},
-	{name: 'Alexei Leonov ', gender: 'xy'},
-	{name: 'Buzz Aldrin', gender: 'xy'},
-	{name: 'Christa McAuliffe', gender: 'xx'},
-	{name: 'Frank Borman', gender: 'xy'},
-	{name: 'Haisheng Nie', gender: 'xy'},
-	{name: 'Jeanette J. Epps', gender: 'xx'},
-	{name: 'Jessica Ulrika "Goose" Meir', gender: 'xx'},
-	{name: 'John Glenn', gender: 'xy'},
-	{name: 'John Young', gender: 'xy'},
-	{name: 'Judith Resnik', gender: 'xx'},
-	{name: 'Koichi Wakata', gender: 'xy'},
-	{name: 'Michael Collins ', gender: 'xy'},
-	{name: 'Neil Armstrong', gender: 'xy', selected: true},
-	{name: 'Sally Ride', gender: 'xx'},
-	{name: 'Svetlana Savitskaya', gender: 'xx'},
-	{name: 'Thomas Gautier Pesquet', gender: 'xy'},
-	{name: 'Valentina Tereshkova', gender: 'xx'},
-	{name: 'Yelena Vladimirovna Kondakova', gender: 'xx'},
-	{name: 'Yuri Gagarin', gender: 'xy'},
-];
+class ThreeBillion extends React.Component {
+	constructor(props) {
+		super(props);
 
-const defaultPatientIndex = 14;
+		ThreeBillion.me = this;
 
-// user chooses new patient from menu
-function setNewPatient(patientIndex) {
-	if (setters.setPatientIndex)
-		setters.setPatientIndex(patientIndex);
-	let thePatient = patients[patientIndex];
+		let thePatient = getDefaultPatient();
+		this.state = {
+			panelDescStack: [{level: 'genome', model: this.createRootGenome(thePatient)}],
+			thePatient,
+			isNarrowScreen: true,  // true if mobile.  event will set this
+		};
 
-	// set up the fake data
-	let theGenome = new genome(thePatient.name, formulate(thePatient.name), thePatient.gender);
-	theGenome.populate();
-	panelDescStack = [
-		{level: 'genome', model: theGenome},
-	];
-}
-// the default
-setNewPatient(defaultPatientIndex);
-
-
-/* ************************************** navigation */
-
-
-// 0 = not changing panels.  -1 means going up.  +1 = going down (longer stack).
-let navigationDirection = 0;
-
-// user clicks on some element in some panel,
-// and this takes them there.  Two ways to call: with one panelDesc,
-// or with individual components
-export function navigateIn(deeperPanelDesc, model) {
-	if (typeof deeperPanelDesc == 'string')
-		deeperPanelDesc = {level: deeperPanelDesc, model};
-
-	// don't just keep on pushing stuff on the stack; get rid of the stuff this replaces
-	for (let i = 0; i < panelDescStack.length; i++) {
-		if (panelDescStack[i].level == deeperPanelDesc.level) {
-			panelDescStack.splice(i, 5,deeperPanelDesc);
-			break;
-		}
-	}
-	panelDescStack.push(deeperPanelDesc);
-	setters.setRightPanelDesc(deeperPanelDesc);
-	navigationDirection = 1;
-	console.info(`navigateIn(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`,
-		[...panelDescStack]);
-}
-
-// user ... clicks on '< genome' or whatever button
-// the level tells which panel it's at the top of
-export function navigateOut(level) {
-	// pop off all levels at that level and lower
-	for (let i = 0; i < panelDescStack.length; i++) {
-		if (panelDescStack[i].level == level) {
-			panelDescStack.splice(i, 5);
-			break;
-		}
-	}
-	setters.setLeftPanelDesc(getCurrentPanelDesc());
-	// but don't set the central panel descriptor, that's where we are.
-	navigationDirection = -1;
-	console.info(`navigateOut(${level}) panelDescStack=`,
-		[...panelDescStack]);
-}
-
-
-/* ************************************** components */
-
-// is it mobile?  Listener fires upon startup and at every change
-const narrowQueryList = window.matchMedia("(max-width: 500px)");
-export let isNarrowScreen;
-
-// Fires when phone rotates or browser window changes width.
-// sets global and hook versions of isNarrowScreen at the same time
-narrowQueryList.addEventListener('change',
-	ev => setters.setIsNarrowScreen(isNarrowScreen = narrowQueryList.match));
-
-
-// only appears on the Genome screen
-function Header(props) {
-	let patientIndex = props.patientIndex;
-	let thePatient = patients[patientIndex];
-
-	let patientOptions = patients.map((pat, ix) =>
-		<option value={ix} key={ix}>
-			{pat.name}, {pat.gender}
-		</option>
-	);
-
-	return (
-		<header>
-			<h1>
-				<img src='chromosome2.png' alt='logo' />
-				3 Billion And Me
-			</h1>
-			<p>
-				A demo chromosome browser. &nbsp;
-				<span style={{color: '#c00'}}>Warning: fake data,
-					generated by a pseudo-random number generator</span>
-			</p>
-			choose patient:
-			<select value={patientIndex} value={patientIndex}
-				onChange={ev => setNewPatient(ev.target.value)} >
-				{patientOptions}
-			</select>
-
-			<br clear='left' />
-		</header>
-	);
-}
-Header.propTypes = {
-	patientIndex: PropTypes.number.isRequired,
-};
-
-// make the panel that the user clicked to.
-// position: 0 for current panel, -1 or +1 if in transition
-function panelFactory(panelDesc, patientIndex, position) {
-
-	let style = {};
-	if (position) {
-		if (isNarrowScreen) {
-			// mobile - make them slide across
-			style = {position: 'relative', transitionProperty: 'left', transitionDuration: '1s'};
-			if (position < 0)
-				style.left = `${-screen.width}px`;
-			else if (position > 0)
-				style.left = `${screen.width}px`;
-		}
 	}
 
-	// let currentPanelDesc = getCurrentPanelDesc();
-	// console.info(`panelFactory: currentPanelDesc, panelDescStack: `, currentPanelDesc, panelDescStack);
+	// this is easier for other modules to access
+	static isNarrowScreen;
 
-	switch (panelDesc.level) {
-		case 'genome':
-			return <div  className='viewingPanel' key='genome' style={style} >
-				<Header patientIndex={patientIndex} key='header'/>
-				<hr key='hr'/>
-				<AGenome theGenome={panelDesc.model} key='AGenome' />
-			</div>;
+	/* ************************************** patient */
 
-		case 'chromo':
-			return <AChromo theChromo={panelDesc.model} key='chromo' style={style} />;
-
-		case 'arm':
-			return <AnArm theArm={panelDesc.model} key='arm' style={style} />;
-
-		case 'gene':
-			return <AGene theGene={panelDesc.model} key='gene' style={style} />;
-
-		default: throw new Error(`bad panelDesc.level: ${panelDesc.level}`);
+	createRootGenome(thePatient) {
+		let theGenome = new genome(thePatient.name, formulate(thePatient.name),
+			thePatient.gender);
+		theGenome.populate();
+		return theGenome;
 	}
-}
 
-
-function ThreeBillion(props) {
-	let [patientIndex, setPatientIndex] = useState(defaultPatientIndex);
-
-	// this isNarrowScreen shadows the exported global, but they're set at the same time
-	let [isNarrowScreen, setIsNarrowScreen] = useState(true);
-
-	// current panel being displayed, an item on panelDescStack
-	let [panelDesc, setPanelDesc] = useState(panelDescStack[0]);
-	//let [panelDesc, setPanelDesc] = useState(getCurrentPanelDesc());
-
-	// next panel we're transitioning to.  If we're transitioning,
-	// one panel up/down from current panel.  If we're not, null.
-	let [leftPanelDesc, setLeftPanelDesc] = useState(null);
-	let [rightPanelDesc, setRightPanelDesc] = useState(null);
-
-	setters = {setPatientIndex, setIsNarrowScreen,
-		setLeftPanelDesc, setPanelDesc, setRightPanelDesc};
-
-	let viewingPanels;
-
-	if (isNarrowScreen) {
-		// upright iPhone
-		viewingPanels = [, panelFactory(panelDesc, patientIndex, 0), ];
-		if (leftPanelDesc) {
-			viewingPanels[0] = panelFactory(leftPanelDesc, patientIndex, -1);
-		}
-		else if (rightPanelDesc) {
-			viewingPanels[2] = panelFactory(rightPanelDesc, patientIndex, +1);
-		}
-	}
-	else {
-		// desktop (maybe?)
-		viewingPanels = panelDescStack.map((panelDef, ix) => {
-			return [
-				<hr />,
-				panelFactory(panelDef, patientIndex, ix)
-			];
+	// user chooses new patient from menu
+	setNewPatient =
+	(thePatient) => {
+		// set up the fake data
+		this.setState({
+			panelDescStack: [{level: 'genome', model: this.createRootGenome(thePatient)}],
+			thePatient,
 		});
 	}
 
 
-	return (<>
+	/* ************************************** mobile */
 
-		<main className="ThreeBillion" id='Main' >
-			{viewingPanels}
-		</main>
-	</>);
+	componentDidMount() {
+		// is it mobile?  Listener fires upon startup and at every change
+		// can't setState() unless mounted.
+		this.narrowQueryList = window.matchMedia("(max-width: 500px)");
+
+		// Fires when phone rotates or browser window changes width.
+		// sets global & state isNarrowScreen at the same time
+		this.narrowQueryList.addEventListener('change',
+			ev => {
+				let isNarrowScreen = ThreeBillion.isNarrowScreen = this.narrowQueryList.match;
+				this.setState({isNarrowScreen});
+			}
+		);
+
+	}
+
+	/* ************************************** navigation */
+	// tells us where we are.  For mobile, this is hte only level showing;
+	// for desktop, all levels up to this one too.
+	getCurrentPanelDesc =
+		() => this.state.panelDescStack.at(-1);
+
+
+	// pop off levels of the stack from the given level to the end
+	// returns new stack; it's up to you to setState().
+	// note we need to have a different object anyway so React notices the change
+	static trimStack(level) {
+		let newStack = [...ThreeBillion.me.state.panelDescStack];
+		for (let i = 0; i < newStack.length; i++) {
+			if (newStack[i].level == level) {
+				newStack = newStack.slice(0, i);
+				break;
+			}
+		}
+		return newStack;
+	}
+
+
+	// user clicks on some element in some panel,
+	// and this takes them there.  Two ways to call: with one panelDesc,
+	// or with individual components
+	static navigateIn(deeperPanelDesc, model) {
+		if (typeof deeperPanelDesc == 'string')
+			deeperPanelDesc = {level: deeperPanelDesc, model};
+
+		// don't just keep on pushing stuff on the stack; get rid of the
+		// stuff this replaces.  (the first time,  nothing.)
+		let newStack = ThreeBillion.trimStack(deeperPanelDesc.level);
+
+		newStack.push(deeperPanelDesc);
+		console.info(`navigateIn(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`,
+			[...newStack]);
+		ThreeBillion.me.setState({panelDescStack: newStack});
+		ThreeBillion.me.scrollToBottom = true;
+	}
+
+	// user ... clicks on '< genome' or whatever button
+	// the level tells which panel we're at; that level is getting deleted.
+	static navigateOut(level) {
+		let newStack = ThreeBillion.trimStack(level);
+
+		console.info(`navigateOut(${level}) panelDescStack=`,
+			[...newStack]);
+		ThreeBillion.me.setState({panelDescStack: newStack});
+		ThreeBillion.me.scrollToBottom = true;
+	}
+
+	/* ************************************** rendering */
+
+	componentDidUpdate() {
+		if (this.scrollToBottom) {
+			window.scrollTo({top: 999999, left: 0, behavior: 'smooth'} );
+			this.scrollToBottom = false;
+		}
+	}
+
+	// make the panel given panel description
+	// style is a react-like style object to be applied to the outside el of the panel
+	panelFactory(panelDesc, thePatient, style) {
+		switch (panelDesc.level) {
+			case 'genome':
+				return <div  className='viewingPanel' key='genome' style={style} >
+					<Header thePatient={thePatient}
+						setNewPatient={this.setNewPatient} key='header'/>
+					<hr key='hr-header'/>
+					<AGenome theGenome={panelDesc.model} key='AGenome' />
+				</div>;
+
+			case 'chromo':
+				return <AChromo theChromo={panelDesc.model} key='chromo' style={style} />;
+
+			case 'arm':
+				return <AnArm theArm={panelDesc.model} key='arm' style={style} />;
+
+			case 'gene':
+				return <AGene theGene={panelDesc.model} key='gene' style={style} />;
+
+			default: throw new Error(`bad panelDesc.level: ${panelDesc.level}`);
+		}
+	}
+
+	render() {
+		let viewingPanels;
+
+		viewingPanels = this.state.panelDescStack.map((panelDef, ix) => {
+			return [
+				<hr key={`hr-${ix}`}/>,
+				this.panelFactory(panelDef, this.state.thePatient, {})
+			];
+		});
+
+		return (<>
+
+			<main className="ThreeBillion" id='Main' >
+				{viewingPanels}
+			</main>
+		</>);
+	}
 }
 
 export default ThreeBillion;
-

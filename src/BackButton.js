@@ -7,15 +7,14 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-import {navigateOut, isNarrowScreen} from './ThreeBillion.js';
-
+import ThreeBillion from './ThreeBillion.js';
 
 function BackButton(props) {
 	function handleClick(ev) {
-		navigateOut(props.level);
+		ThreeBillion.navigateOut(props.level);
 	}
 
-	const arrow = isNarrowScreen ? '❮ ' : '⇧';  // or try ⬆
+	const arrow = ThreeBillion.isNarrowScreen ? '❮ ' : '⇧';  // or try ⬆
 
 	return (
 		<button className='BackButton clickable' onClick={handleClick} >
@@ -25,7 +24,10 @@ function BackButton(props) {
 }
 
 BackButton.propTypes = {
+	// the title of the level above where you are, one above the level
 	title: PropTypes.string.isRequired,
+
+	// the level that you are at, one below the title
 	level: PropTypes.string.isRequired,
 };
 

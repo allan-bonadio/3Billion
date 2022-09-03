@@ -26,7 +26,8 @@ function AGenome(props) {
 		<ChromoInGenome theChromo={theChromo} theGenome={theGenome} key={theChromo.name} />);
 
 	return (
-		<div className='AGenome' key='genome'>
+		<div className='AGenome' key='genome'
+				onMouseMove={ev => ev.preventDefault()}>
 			<h3>Genome for {name}</h3>
 			<p>Choose which chromosome to explore:</p>
 			{chromos}

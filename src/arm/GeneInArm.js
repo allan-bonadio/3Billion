@@ -13,7 +13,7 @@ import arm from './arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
-import {navigateIn} from '../ThreeBillion.js';
+import ThreeBillion from '../ThreeBillion.js';
 
 const num = new Intl.NumberFormat();
 
@@ -23,7 +23,7 @@ function GeneInArm(props) {
 
 	return (<>
 		<div className='GeneInArm clickable' style={style}
-			onClick={ev => navigateIn('gene', theGene)}>
+			onClick={ev => ThreeBillion.navigateIn('gene', theGene)}>
 			<span className='rowIndex'>{num.format(index)}</span>
 			<span className='rowCodon'>{theGene.name}</span>
 		</div>
@@ -34,6 +34,8 @@ GeneInArm.propTypes = {
 	theGene: PropTypes.instanceOf(gene).isRequired,
 	theArm: PropTypes.instanceOf(arm).isRequired,
 	style: PropTypes.object.isRequired,
+	selected: PropTypes.bool,
+	onClick: PropTypes.func,
 };
 
 export default GeneInArm;

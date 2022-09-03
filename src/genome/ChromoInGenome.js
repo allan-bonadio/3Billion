@@ -13,7 +13,7 @@ import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
-import {navigateIn} from '../ThreeBillion.js';
+import ThreeBillion from '../ThreeBillion.js';
 
 function ChromoInGenome(props) {
 	const {theChromo} = props;
@@ -23,10 +23,13 @@ function ChromoInGenome(props) {
 				alt={'chromosome '+ name} />;
 
 	return (<>
-		<div className='ChromoInGenome' key={name}
-				onClick={ev => navigateIn('chromo', theChromo)}>
-			<div className='cover clickable' />
-				{icon}
+		<div className='ChromoInGenome clickable' key={name}
+				onClick={ev => {
+					ThreeBillion.navigateIn('chromo', theChromo);
+					ev.preventDefault();
+					ev.stopPropagation();
+				}}>
+			{icon}
 			<div>{name}</div>
 		</div>
 	</>);

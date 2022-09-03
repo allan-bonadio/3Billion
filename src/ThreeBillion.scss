@@ -4,7 +4,12 @@
 */
 /* eslint-disable no-unused-vars */
 
+html {
+	scroll-behavior: smooth;
+}
+
 body {
+	// should move these to root
 	box-sizing: border-box;
 	font-family: verdana, helvetica, arial, sans-serif;
 	font-size: 16px;
@@ -26,7 +31,7 @@ header img {
 main#Main {
 	@media  (hover: hover) {
 		.clickable:hover {
-			background-color: #cdd;
+			background-color: #cde8;
 			z-index: 10;
 		}
 	}
@@ -34,13 +39,13 @@ main#Main {
 	// anything the user clicks that hilites  upon click and hover
 	// must put :active after :hover
 	.clickable:active {
-		background-color: #008;
+		background-color: #48c8;
 		color: #ff8;
 		z-index: 10;
 	}
 
 	.clickable.selected {
-		background-color: #00fa;
+		background-color: #00f8;
 		z-index: 10;
 	}
 
@@ -53,7 +58,7 @@ main#Main {
 		background-color: transparent;
 		border: none;
 		color: #0ad;
-
+		border-radius: 1em;
 	}
 }
 
@@ -65,18 +70,22 @@ main#Main {
 }
 @media not (max-width: 500px) {
 	.viewingPanel {
+		margin: 0 auto;
 		//float: left;
 	}
 }
 
 
 .AGenome {
+	p {text-align: center;}
+
 	.ChromoInGenome {
 		position: relative;
 		float: left;
 		margin: .5em;
 		text-align: center;
 		font-size: .7em;
+		border-radius: 1em;
 
 		// where the green hiliting comes from
 		.cover {
@@ -130,10 +139,9 @@ main#Main {
 	.ArmInChromo {
 		position: absolute;
 		width: 185px;
-		//border: 1px dotted #ccc;
 		text-align: center;
 		font-size: .7em;
-		padding-top: 10%;
+		padding-top: 5%;
 		border-radius: 1em;
 
 		// the card behind the text
@@ -152,23 +160,26 @@ main#Main {
 }
 
 .AnArm, .AGene {
+	width: 400px;
 	border: 1px solid #aaa;
 
-	.GeneInArm, .CodonInGene {
-		width: 100%;
-		display: flex;
+	.longList {
+		.GeneInArm, .CodonInGene {
+			width: 100%;
+			display: flex;
 
-		span {
-			display: inline-block;
-			flex: 1 0 3em;
-		}
-		span:first-child {
-			flex: 0 0 6em;
-			text-align: right;
-			margin-right: 1em;
-			flex: 2;
-			font-size: .7em;
-			color: #666;
+			span {
+				display: inline-block;
+				flex: 1 0 3em;
+			}
+			span:first-child {
+				flex: 0 0 6em;
+				text-align: right;
+				margin-right: 1em;
+				flex: 2;
+				font-size: .7em;
+				color: #666;
+			}
 		}
 	}
 }

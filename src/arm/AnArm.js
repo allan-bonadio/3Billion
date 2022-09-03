@@ -19,12 +19,18 @@ import arm from './arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
+// i really should modularize this index selection stuff
+let currentSelectedIndex;
+let currentSetSelectedIndex;
 
 const Row = ({index, style, data}) => {
 	let theArm = data;
 	let theGene = theArm.list[index];
 	return <GeneInArm theGene={theGene} theArm={theArm}
-		key={theGene.name} index={index} style={style} />;
+		style={style}
+		key={index} index={index}
+		selected={index == currentSelectedIndex}
+		onClick={ev => currentSetSelectedIndex(index)} />
 }
 
 function AnArm(props) {
@@ -34,16 +40,18 @@ function AnArm(props) {
 	theArm.populate();
 	//console.info(`theArm.list: `, theArm.list);
 
+	let heightWeWant = visualViewport.height - 80;
+
 	return (<div className='AnArm viewingPanel' key='arm' style={style}>
-		<BackButton title='Chromosome' level='chromo' />
+		<BackButton title='Chromosome' level='arm' />
 		<h3>Arm {theArm.name}</h3>
 		<List
 			itemCount={theArm.list.length}
 			itemData={theArm}
 			itemSize={20}
 			width={250}
-			height={400}
-			className='AnArm'
+			height={heightWeWant}
+			className='armList longList'
 		>
 			{Row}
 		</List>

@@ -13,7 +13,7 @@ import arm from '../arm/arm.js';
 import gene from '../gene/gene.js';
 import codon from '../codon/codon.js';
 
-import {navigateIn} from '../ThreeBillion.js';
+import ThreeBillion from '../ThreeBillion.js';
 
 
 
@@ -43,7 +43,7 @@ function ArmInChromo(props) {
 
 	return (<>
 		<div className={`ArmInChromo ${name} clickable`} style={style}
-			onClick={ev => navigateIn('arm', theArm)}>
+			onClick={ev => ThreeBillion.navigateIn('arm', theArm)}>
 			<div>
 				<div>{'L' == side ? 'left ' : 'right '}</div>
 				<div>{titlePiece}</div>
