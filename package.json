@@ -43,5 +43,6 @@
   "devDependencies": {
     "sass": "^1.54.5",
     "scss": "^0.2.4"
-  }
+  },
+  "homepage": "http://x.tactileint.org/3billion"
 }
