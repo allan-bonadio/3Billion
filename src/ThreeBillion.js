@@ -2,10 +2,9 @@
 ** 3Billion -- root component of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq, no-restricted-globals,  no-sparse-arrays */
+/* eslint-disable eqeqeq, no-restricted-globals,  no-sparse-arrays */
 
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 import './ThreeBillion.scss';
 import AGenome from './genome/AGenome.js';
@@ -14,10 +13,6 @@ import AnArm from './arm/AnArm.js';
 import AGene from './gene/AGene.js';
 
 import genome from './genome/genome.js';
-import chromo from './chromo/chromo.js';
-import arm from './arm/arm.js';
-import gene from './gene/gene.js';
-import codon from './codon/codon.js';
 
 import formulate from './formulate.js';
 import Header, {getDefaultPatient} from './Header.js';
@@ -29,14 +24,15 @@ class ThreeBillion extends React.Component {
 		super(props);
 
 		ThreeBillion.me = this;
+		window.ThreeBiillion = this;
 
 		let thePatient = getDefaultPatient();
 		this.state = {
 			panelDescStack: [{level: 'genome', model: this.createRootGenome(thePatient)}],
 			thePatient,
-			isNarrowScreen: true,  // true if mobile.  event will set this
+			isNarrowScreen: true,  // true if mobile. an event will set this
+			renderMe: 0,
 		};
-
 	}
 
 	// this is easier for other modules to access
@@ -64,20 +60,27 @@ class ThreeBillion extends React.Component {
 
 	/* ************************************** mobile */
 
+	setScreenInfo =
+	ev => {
+		let isNarrowScreen = ThreeBillion.isNarrowScreen = this.narrowQueryList.matches;
+		let viewportWidth = ThreeBillion.viewportWidth = document.body.offsetWidth;
+		this.setState({isNarrowScreen, viewportWidth});
+		console.info(`body width=${viewportWidth }   isNarrowScreen= `, isNarrowScreen);
+	}
+
 	componentDidMount() {
-		// is it mobile?  Listener fires upon startup and at every change
-		// can't setState() unless mounted.
 		this.narrowQueryList = window.matchMedia("(max-width: 500px)");
 
 		// Fires when phone rotates or browser window changes width.
 		// sets global & state isNarrowScreen at the same time
-		this.narrowQueryList.addEventListener('change',
-			ev => {
-				let isNarrowScreen = ThreeBillion.isNarrowScreen = this.narrowQueryList.match;
-				this.setState({isNarrowScreen});
-			}
-		);
+		if (this.narrowQueryList.addEventListener)
+			this.narrowQueryList.addEventListener('change', this.setScreenInfo);
+		else
+			this.narrowQueryList.onchange = this.setScreenInfo;
 
+		this.setScreenInfo();
+
+		document.addEventListener('scroll', this.scrollHandler);
 	}
 
 	/* ************************************** navigation */
@@ -101,11 +104,10 @@ class ThreeBillion extends React.Component {
 		return newStack;
 	}
 
-
 	// user clicks on some element in some panel,
 	// and this takes them there.  Two ways to call: with one panelDesc,
 	// or with individual components
-	static navigateIn(deeperPanelDesc, model) {
+	static navigateLower(deeperPanelDesc, model) {
 		if (typeof deeperPanelDesc == 'string')
 			deeperPanelDesc = {level: deeperPanelDesc, model};
 
@@ -114,29 +116,79 @@ class ThreeBillion extends React.Component {
 		let newStack = ThreeBillion.trimStack(deeperPanelDesc.level);
 
 		newStack.push(deeperPanelDesc);
-		console.info(`navigateIn(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`,
-			[...newStack]);
+		console.info(`navigateLower(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`, [...newStack], new Date());
 		ThreeBillion.me.setState({panelDescStack: newStack});
-		ThreeBillion.me.scrollToBottom = true;
+		//setTimeout(() => {window.scrollTo(2000, 0);}, 2000)
+		setTimeout(() => {location.hash = '#'+ deeperPanelDesc.level;}, 500)
+		//location.hash = '#chromo';
+		ThreeBillion.me.scrollToEnd = true;
 	}
 
 	// user ... clicks on '< genome' or whatever button
 	// the level tells which panel we're at; that level is getting deleted.
-	static navigateOut(level) {
-		let newStack = ThreeBillion.trimStack(level);
+	static navigateHigher(level) {
+		// in this case, we want to scroll BEFORE changing the stack.
+		if (ThreeBillion.isNarrowScreen)
+			window.scrollTo({left: 999999, top: 0, behavior: 'smooth'} );
+		else
+			window.scrollTo({top: 999999, left: 0, behavior: 'smooth'} );
 
-		console.info(`navigateOut(${level}) panelDescStack=`,
-			[...newStack]);
+		let newStack = ThreeBillion.trimStack(level);
+		//console.info(`navigateHigher(${level}) panelDescStack=`,
+		//	[...newStack]);
 		ThreeBillion.me.setState({panelDescStack: newStack});
-		ThreeBillion.me.scrollToBottom = true;
+	}
+
+	/* ************************************** scrolling */
+
+	scrollTimeout;
+
+	// if the scroll is near a panel boundary, slide it to being exactly there.
+	// doesn't always work, like Chrome's mobile emulator.
+	// called continuously while user is scrolling
+	scrollHandler =
+	ev => {
+		// now wait for the user to stop...
+		if (this.scrollTimeout)
+			clearTimeout(this.scrollTimeout);
+
+		this.scrollTimeout = setTimeout(() => {
+			// the only way to get here is if the user stops scrolling for a bit
+			console.info(`scroll slowed... x=${window.scrollX} y=${window.scrollY}`);
+
+			if (ThreeBillion.isNarrowScreen) {
+				// snap to a scroll point, if it's near one
+				let screensScrolled = window.scrollX / ThreeBillion.viewportWidth;
+				let frac = screensScrolled % 1;
+				console.info(`now rounding scroll frac=${frac}, screensScrolled=${screensScrolled} `);
+
+				if (frac > .8 || frac < .2) {
+					let scrollMeTo = Math.round(screensScrolled) * ThreeBillion.viewportWidth;
+					console.info(` to ${scrollMeTo} ${window.scrollY}`)
+					window.scrollTo({left: scrollMeTo, top: window.scrollY, behavior: 'smooth'} );
+				}
+			}
+
+			this.scrollTimeout = undefined;
+		}, 200);
+
 	}
 
 	/* ************************************** rendering */
 
 	componentDidUpdate() {
-		if (this.scrollToBottom) {
-			window.scrollTo({top: 999999, left: 0, behavior: 'smooth'} );
-			this.scrollToBottom = false;
+		if (this.scrollToEnd) {
+			setTimeout(() => {
+				console.info(`scrollToEnd`);
+				if (ThreeBillion.isNarrowScreen) {
+					window.scrollTo({left: 2000, top: 0, behavior: 'smooth'} );
+				}
+				else
+					window.scrollTo({top: 2000, left: 0, behavior: 'smooth'} );
+				console.info(`scrollToEnd: scrollX=${window.scrollX}  scrollY=${window.scrollY}`);
+
+			}, 200);
+			this.scrollToEnd = false;
 		}
 	}
 
@@ -145,10 +197,9 @@ class ThreeBillion extends React.Component {
 	panelFactory(panelDesc, thePatient, style) {
 		switch (panelDesc.level) {
 			case 'genome':
-				return <div  className='viewingPanel' key='genome' style={style} >
+				return <div  id='genome' className='viewingPanel' key='genome' style={style} >
 					<Header thePatient={thePatient}
 						setNewPatient={this.setNewPatient} key='header'/>
-					<hr key='hr-header'/>
 					<AGenome theGenome={panelDesc.model} key='AGenome' />
 				</div>;
 
@@ -170,11 +221,10 @@ class ThreeBillion extends React.Component {
 
 		viewingPanels = this.state.panelDescStack.map((panelDef, ix) => {
 			return [
-				<hr key={`hr-${ix}`}/>,
 				this.panelFactory(panelDef, this.state.thePatient, {})
 			];
 		});
-
+		console.info(`rendering ${this.state.panelDescStack.length} panels`, new Date());
 		return (<>
 
 			<main className="ThreeBillion" id='Main' >
@@ -183,5 +233,6 @@ class ThreeBillion extends React.Component {
 		</>);
 	}
 }
+
 
 export default ThreeBillion;

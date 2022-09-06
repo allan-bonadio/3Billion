@@ -2,7 +2,6 @@
 ** 3Billion -- root component of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars */
 
 html {
 	scroll-behavior: smooth;
@@ -31,22 +30,9 @@ header img {
 main#Main {
 	@media  (hover: hover) {
 		.clickable:hover {
-			background-color: #cde8;
+			background-color: #8cf8;
 			z-index: 10;
 		}
-	}
-
-	// anything the user clicks that hilites  upon click and hover
-	// must put :active after :hover
-	.clickable:active {
-		background-color: #48c8;
-		color: #ff8;
-		z-index: 10;
-	}
-
-	.clickable.selected {
-		background-color: #00f8;
-		z-index: 10;
 	}
 
 	h3 {
@@ -57,21 +43,53 @@ main#Main {
 	.BackButton {
 		background-color: transparent;
 		border: none;
-		color: #0ad;
+		color: #07a;
 		border-radius: 1em;
+		font-size: 16px;
 	}
 }
 
-// any of the AGenome, AnArm, AGene main panels
+// viewingPanel: any of the AGenome, AnArm, AGene main panels
 @media (max-width: 500px) {
-	.viewingPanel {
-		position: fixed;
+	// mobile
+	main {
+		display: flex;
+		flex-direction: row;
+		-webkit-tap-highlight-color: #fc8;  // doesn't seem to work anymore
+
+		.viewingPanel {
+			flex: 0 0 100%;
+			//border-left: 1px red dashed;
+
+		}
+
 	}
 }
 @media not (max-width: 500px) {
-	.viewingPanel {
-		margin: 0 auto;
-		//float: left;
+	// desktop
+	main {
+		display: flex;
+		flex-direction: column;
+
+		.viewingPanel {
+			flex: 0 0 100%;;
+			margin: 0 auto;
+			//border-top: 1px red dashed;
+		}
+
+		select {
+			font-size: 16px;
+			padding: .3em 2em;
+		}
+
+		// anything the user clicks that hilites  upon click and hover
+		// must put :active after :hover.  Makes a mess on iphone, though.
+		.clickable:active {
+			background-color: #fc8;
+			color: #ff8;
+			z-index: 10;
+		}
+
 	}
 }
 
@@ -87,15 +105,6 @@ main#Main {
 		font-size: .7em;
 		border-radius: 1em;
 
-		// where the green hiliting comes from
-		.cover {
-			position: absolute;
-			background-color: #0000;
-			width: 100%;
-			height: 100%;
-			border-radius: 1em;
-		}
-
 		.leftX {
 			position: absolute;
 			clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100% );
@@ -110,13 +119,13 @@ main#Main {
 
 
 .AChromo {
-	// never bigger than the image
-	max-width: 370px;
 	position: relative;
 
 	.chromoImage {
 		max-height: 768px;
+		max-width: 370px;
 		position: relative;
+		margin: 0 auto;
 
 		.armContainer {
 			position: absolute;
@@ -160,10 +169,15 @@ main#Main {
 }
 
 .AnArm, .AGene {
-	width: 400px;
-	border: 1px solid #aaa;
+	width: 100%;
+	//border: 1px solid #aaa;
+	margin: 0 auto;
 
 	.longList {
+		margin: 0 auto;
+		background: #fff;
+		border: 8ff;
+
 		.GeneInArm, .CodonInGene {
 			width: 100%;
 			display: flex;
