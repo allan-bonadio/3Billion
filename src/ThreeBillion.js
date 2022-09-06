@@ -118,9 +118,6 @@ class ThreeBillion extends React.Component {
 		newStack.push(deeperPanelDesc);
 		console.info(`navigateLower(${JSON.stringify(deeperPanelDesc)}) panelDescStack=`, [...newStack], new Date());
 		ThreeBillion.me.setState({panelDescStack: newStack});
-		//setTimeout(() => {window.scrollTo(2000, 0);}, 2000)
-		setTimeout(() => {location.hash = '#'+ deeperPanelDesc.level;}, 500)
-		//location.hash = '#chromo';
 		ThreeBillion.me.scrollToEnd = true;
 	}
 
