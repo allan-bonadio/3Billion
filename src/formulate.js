@@ -1,8 +1,8 @@
-/*
+ /*
 ** formulate -- a seeded random number generator for consistent arbitrary data
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq */
+/* eslint-disable eqeqeq */
 
 import seed from 'seed-random';
 

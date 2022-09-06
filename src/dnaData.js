@@ -2,7 +2,7 @@
 ** dnaData -- data tables for use by arm.js thru genome.js
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq */
+/* eslint-disable eqeqeq */
 
 
 /* ******************************************************************* chromos */
@@ -94,15 +94,15 @@ XY23: {bases: 2963015935, vars: 0, proteins: 19557,
 	miRna: 1628, rRna: 508, snRna: 1859, snoRna: 1457, misc: 2113},
 };
 
-function printChromoStats() {
-	for (let name in chromoCounts) {
-		let ch = chromoCounts[name];
-		let genoThings = ch.proteins +
-			ch.pseudo + ch.totLong + ch.totSmall +
-			ch.miRna + ch.rRna + ch.snRna + ch.snoRna + ch.misc;
-		console.log(`${name}  bases/prots=${ch.bases / ch.proteins}     bases/things=${ch.bases / genoThings}`);
-	}
-}
+// function printChromoStats() {
+// 	for (let name in chromoCounts) {
+// 		let ch = chromoCounts[name];
+// 		let genoThings = ch.proteins +
+// 			ch.pseudo + ch.totLong + ch.totSmall +
+// 			ch.miRna + ch.rRna + ch.snRna + ch.snoRna + ch.misc;
+// 		console.log(`${name}  bases/prots=${ch.bases / ch.proteins}     bases/things=${ch.bases / genoThings}`);
+// 	}
+// }
 //printChromoStats();
 
 // size is in kbp - um not always in agreement with the above.

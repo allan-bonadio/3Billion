@@ -2,17 +2,9 @@
 ** gene -- part of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars */
 
 import dnaObject from '../dnaObject.js';
-import genome from '../genome/genome.js';
-import chromo from '../chromo/chromo.js';
-import arm from '../arm/arm.js';
 import codon from '../codon/codon.js';
-
-import formulate from '../formulate.js';
-import {codonToAmino} from '../dnaData.js';
-
 
 class gene extends dnaObject {
 // 	constructor(name, formula) {
@@ -23,7 +15,6 @@ class gene extends dnaObject {
 	populate() {
 		if (this.list.length)
 			return; // already populated
-		let {formula} = this;
 
 		// how many bases in this gene?  just guess for now
 		let nCodons = 4000;

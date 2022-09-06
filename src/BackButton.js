@@ -2,19 +2,17 @@
 ** BackButton -- simple button on each panel to navigate upward
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq */
 
-import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 import ThreeBillion from './ThreeBillion.js';
 
 function BackButton(props) {
 	function handleClick(ev) {
-		ThreeBillion.navigateOut(props.level);
+		ThreeBillion.navigateHigher(props.level);
 	}
 
-	const arrow = ThreeBillion.isNarrowScreen ? '❮ ' : '⇧';  // or try ⬆
+	const arrow = ThreeBillion.isNarrowScreen ? '❮ ' : '⬆';  // or try ⇧
 
 	return (
 		<button className='BackButton clickable' onClick={handleClick} >

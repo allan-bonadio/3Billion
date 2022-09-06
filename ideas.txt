@@ -8,7 +8,7 @@ Levels of View
 	just the 24.  double click zooms in.  maybe click brings info on it in side panel
 
 - 1 chromosomes - left and right.
-	with centromere & telemeres
+	with centromere & telomeres
 	p (short) and q (long) arms
 	Click/doubleclick  on one of the arms, telemeres, centromere?
 
