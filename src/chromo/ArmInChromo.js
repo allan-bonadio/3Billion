@@ -2,28 +2,24 @@
 ** ArmInChromo -- part of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars, eqeqeq */
+/* eslint-disable eqeqeq */
 
-import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
-import genome from '../genome/genome.js';
 import chromo from './chromo.js';
 import arm from '../arm/arm.js';
-import gene from '../gene/gene.js';
-import codon from '../codon/codon.js';
 
 import ThreeBillion from '../ThreeBillion.js';
 
 
 
 
-const topHeight = {
+const armInfo = {
 	pter: [0, '10%', 'teleomere, short end'],
-	p: ['10%', '11%', 'short arm'],
+	p: ['10%', '12%', 'short arm'],
 	cen: ['22%', '10%', 'centromere'],
-	q: ['32%', '57%', 'long arm'],
-	qter: ['90%', '10%', 'teleomere, long end'],
+	q: ['32%', '56%', 'long arm'],
+	qter: ['88%', '10%', 'teleomere, long end'],
 };
 
 
@@ -35,15 +31,13 @@ function ArmInChromo(props) {
 	// we figure out where we should be from the name
 	let [armCode, side] = name.split('_');
 
-	let [top, height, titlePiece] = topHeight[armCode];
-	let left = ('L' == side) ? 0 : 185;
+	let [top, height, titlePiece] = armInfo[armCode];
+	let left = ('L' == side) ? 0 : '50%';
 	let style = {top, height, left};
-
-	let title =  +'<br/>'+ titlePiece;
 
 	return (<>
 		<div className={`ArmInChromo ${name} clickable`} style={style}
-			onClick={ev => ThreeBillion.navigateIn('arm', theArm)}>
+			onClick={ev => ThreeBillion.navigateLower('arm', theArm)}>
 			<div>
 				<div>{'L' == side ? 'left ' : 'right '}</div>
 				<div>{titlePiece}</div>
