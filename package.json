@@ -1,6 +1,7 @@
 {
   "name": "3billion",
   "version": "0.1.0",
+  "author": "Allan Bonadio <bojnac@tactileint.org> (http://portfolio.tactileint.org)",
   "description": "demo Chromosome Browser",
   "private": true,
   "type": "module",
@@ -20,7 +21,8 @@
     "build": "react-scripts build",
     "test": "jest",
     "oldTest": "react-scripts test",
-    "eject": "react-scripts eject"
+    "NONONOdontothiseject": "react-scripts eject",
+    "deploy": "SFTP_LOGIN_INFO=allan@nakoda ./deploy.sh"
   },
   "eslintConfig": {
     "extends": [
