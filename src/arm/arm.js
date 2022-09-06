@@ -2,20 +2,16 @@
 ** arm -- part of the 3 Billion and Me project
 ** Copyright (C) 2022-2022 Tactile Interactive, all rights reserved
 */
-/* eslint-disable no-unused-vars */
 
 import dnaObject from '../dnaObject.js';
-import genome from '../genome/genome.js';
-import chromo from '../chromo/chromo.js';
 import gene from '../gene/gene.js';
-import codon from '../codon/codon.js';
 
-import formulate from '../formulate.js';
-import {codonToAmino} from '../dnaData.js';
+//import {codonToAmino} from '../dnaData.js';
 
 class arm extends dnaObject {
 	constructor(name, side, title, formula, chromoName) {
 		super(name, formula);
+		this.title = title;
 		this.chromoName = chromoName;
 	}
 
